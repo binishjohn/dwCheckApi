@@ -3,8 +3,8 @@ using dwCheckApi.Helpers;
 
 namespace dwCheckApi.Controllers
 {
+    [ApiController]
     [Route("/[controller]")]
-    [Produces("text/plain")]
     public class VersionController : BaseController
     {
         /// <summary>

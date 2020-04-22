@@ -7,12 +7,12 @@ namespace dwCheckApi.DTO.ViewModels
         public BookViewModel()
         {
             Characters = new List<string>();
-            Series = new Dictionary<int, string>();
+            Series = new List<KeyValuePair<int, string>>();
         }
 
         public string BookIsbn10 { get; set; }
         public string BookIsbn13 { get; set; }
         public List<string> Characters { get; set; }
-        public Dictionary<int,string> Series { get; set; }
+        public List<KeyValuePair<int, string>> Series { get; set; }
     }
 }

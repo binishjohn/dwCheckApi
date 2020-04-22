@@ -8,8 +8,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace dwCheckApi.Controllers
 {
+    [ApiController]
     [Route("/[controller]")]
-    [Produces("application/json")]
     public class DatabaseController : BaseController
     {
         private readonly IConfiguration _configuration;
@@ -29,11 +29,11 @@ namespace dwCheckApi.Controllers
         /// were added to the database.
         /// </returns>
         [HttpGet("SeedData")]
-        public JsonResult SeedData()
+        public IActionResult SeedData()
         {
             var entitiesAdded = _databaseService.SeedDatabase();
 
-            return MessageResult($"Number of new entities added: {entitiesAdded}");
+            return Ok($"Number of new entities added: {entitiesAdded}");
 
         }
 
@@ -47,17 +47,22 @@ namespace dwCheckApi.Controllers
         /// A <see cref="BaseController.MessageResult"/>
         /// </returns>
         [HttpDelete("DropData")]
-        public JsonResult DropData(string secret = null)
+        public IActionResult DropData(string secret = null)
         {
             if (SecretChecker.CheckUserSuppliedSecretValue(secret,
                 _configuration["dropDatabaseSecretValue"]))
             {
-                return ErrorResponse("Incorrect secret");
+                return Unauthorized("Incorrect secret");
             }
 
             var success = _databaseService.ClearDatabase();
 
-            return MessageResult("Database tabled dropped and recreated", success);
+            if (!success)
+            {
+             return BadRequest("Unable to drop database");   
+            }
+
+            return Ok("Database tabled dropped and recreated");
         }
 
         /// <summary>
@@ -67,22 +72,22 @@ namespace dwCheckApi.Controllers
         /// A <see cref="BaseController.MessageResult"/> with the number of entities which were altered.
         /// </returns>
         [HttpGet("ApplyBookCoverArt")]
-        public async Task<JsonResult> ApplyBookCoverArt()
+        public async Task<IActionResult> ApplyBookCoverArt()
         {
             var relevantBooks = _databaseService.BooksWithoutCoverBytes();
 
-            using (var webclient = new WebClient())
+            using (var webClient = new WebClient())
             {
                 foreach (var book in relevantBooks.ToList())
                 {
-                    var coverData = webclient.DownloadData(book.BookCoverImageUrl);
+                    var coverData = webClient.DownloadData(book.BookCoverImageUrl);
                     book.BookCoverImage = coverData;
                 }
             }
 
             var updatedRecordCount = await _databaseService.SaveAnyChanges();
 
-            return MessageResult($"{updatedRecordCount} entities updated");
+            return Ok($"{updatedRecordCount} entities updated");
         }
     }
 }

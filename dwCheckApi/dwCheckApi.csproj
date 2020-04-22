@@ -3,9 +3,9 @@
     <Description>
         A .NET Core WebApi project, utilizing SqlLite and EF Core, for searching Discworld Books and Characters.
     </Description>
-    <VersionPrefix>2.5.2</VersionPrefix>
+    <VersionPrefix>3.1.0</VersionPrefix>
     <Authors>Jamie Taylor</Authors>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>dwCheckApi</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>dwCheckApi</PackageId>
@@ -13,11 +13,11 @@
   </PropertyGroup>
   <!-- Add XML documentation for Swagger (debug) -->
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp2.1\dwCheckApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp3.1\dwCheckApi.xml</DocumentationFile>
   </PropertyGroup>
   <!-- Add XML documentation for Swagger (release) -->
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp2.1\dwCheckApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netcoreapp3.1\dwCheckApi.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Content Update="wwwroot;Views;appsettings.json;web.config">
@@ -25,11 +25,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />
-    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="ClacksMiddlware" Version="2.0.2" />
     <PackageReference Include="OwaspHeaders.Core" Version="3.3.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
   </ItemGroup>
   <ItemGroup>
     <!-- Required to ensure that we have the appsettings file copied to the publish directory -->

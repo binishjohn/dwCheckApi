@@ -27,7 +27,7 @@ namespace dwCheckApi.DTO.Helpers
 
             foreach(var series in dbModel.BookSeries)
             {
-                viewModel.Series.Add(series.SeriesId, series.Series.SeriesName ?? string.Empty);
+                viewModel.Series.Add(new KeyValuePair<int, string>(series.SeriesId, series.Series.SeriesName ?? string.Empty));
             }
 
             return viewModel;

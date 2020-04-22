@@ -5,8 +5,8 @@ using dwCheckApi.DTO.Helpers;
 
 namespace dwCheckApi.Controllers
 {
+    [ApiController]
     [Route("/[controller]")]
-    [Produces("application/json")]
     public class SeriesController : BaseController
     {
         private readonly ISeriesService _seriesService;
@@ -26,15 +26,15 @@ namespace dwCheckApi.Controllers
         /// If no record can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("Get/{id}")]
-        public JsonResult GetById(int id)
+        public IActionResult GetById(int id)
         {
             var dbSeries = _seriesService.GetById(id);
             if (dbSeries == null)
             {
-                return ErrorResponse("Not found");
+                return NotFound("Not found");
             }
             
-            return SingleResult(SeriesViewModelHelpers.ConvertToViewModel(dbSeries));
+            return Ok(SeriesViewModelHelpers.ConvertToViewModel(dbSeries));
         }
 
         /// <summary>
@@ -47,21 +47,21 @@ namespace dwCheckApi.Controllers
         /// If no record can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("GetByName")]
-        public JsonResult GetByName(string seriesName)
+        public IActionResult GetByName(string seriesName)
         {
             if (string.IsNullOrWhiteSpace(seriesName))
             {
-                return ErrorResponse("Series name is required");
+                return BadRequest("Series name is required");
             }
 
             var series = _seriesService.GetByName(seriesName);
 
             if (series == null)
             {
-                return ErrorResponse("No Series found");
+                return NotFound("No Series found");
             }
 
-            return SingleResult(SeriesViewModelHelpers.ConvertToViewModel(series));
+            return Ok(SeriesViewModelHelpers.ConvertToViewModel(series));
         }
 
         /// <summary>
@@ -74,17 +74,17 @@ namespace dwCheckApi.Controllers
         /// If no record can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("Search")]
-        public JsonResult Search(string searchString)
+        public IActionResult Search(string searchString)
         {
             var series = _seriesService
                 .Search(searchString);
 
             if (!series.Any())
             {
-                return ErrorResponse("Not Found");
+                return NotFound("No series found");
             }
                             
-            return MultipleResults(SeriesViewModelHelpers.ConvertToViewModels(series.ToList()));
+            return Ok(SeriesViewModelHelpers.ConvertToViewModels(series.ToList()));
         }
     }
 }

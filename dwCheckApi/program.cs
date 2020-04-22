@@ -1,6 +1,5 @@
-using System.IO;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace dwCheckApi
 {
@@ -8,18 +7,14 @@ namespace dwCheckApi
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            // Notes for CreateDefaultBuilder:
-            //    - loads IConfiguration from UserSecrets automatically when in Development env
-            //    - still loads IConfiguration from appsettings[envName].json
-            //    - adds Developer Exception page when in Development env
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                // might need this anyway
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .Build();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

@@ -20,11 +20,10 @@ namespace dwCheckApi
         
         public static void UseCustomisedMvc(this IApplicationBuilder applicationBuilder)
         {
-            applicationBuilder.UseMvc(routes =>
+            applicationBuilder.UseRouting();
+            applicationBuilder.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
 

@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace dwCheckApi.Controllers
 {
+    [ApiController]
     [Route("/")]
-    [Produces("text/plain")]
     public class NotFoundController : BaseController
     {
         /// <summary>

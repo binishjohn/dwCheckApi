@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 
@@ -34,14 +35,14 @@ namespace dwCheckApi
             });
 
             services.AddCustomizedMvc();
-            services.AddCorsPolicy();
+            //services.AddCorsPolicy();
             services.AddDbContext();
             services.AddTransientServices();
             services.AddSwagger($"v{CommonHelpers.GetVersionNumber()}");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -50,7 +51,7 @@ namespace dwCheckApi
             }
 
             // Only block and upgrade all insecure requests when not in dev
-            // temporarily commented out, in order to get the docker container runnning
+            // temporarily commented out, in order to get the docker container running
             //app.UseSecureHeaders(env.IsProdOrStaging());
             app.UseResponseCaching();
             app.UseResponseCompression();

@@ -5,8 +5,8 @@ using dwCheckApi.DTO.Helpers;
 
 namespace dwCheckApi.Controllers
 {
+    [ApiController]
     [Route("/[controller]")]
-    [Produces("application/json")]
     public class CharactersController : BaseController
     {
         private readonly ICharacterService _characterService;
@@ -26,12 +26,15 @@ namespace dwCheckApi.Controllers
         /// If no record can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("Get/{id}")]
-        public JsonResult GetById(int id)
+        public IActionResult GetById(int id)
         {
             var dbCharacter = _characterService.GetById(id);
-            return dbCharacter == null
-                ? ErrorResponse("Not found")
-                : SingleResult(CharacterViewModelHelpers.ConvertToViewModel(dbCharacter.CharacterName));
+            if (dbCharacter == null)
+            {
+                return NotFound();
+            }
+            
+            return Ok(CharacterViewModelHelpers.ConvertToViewModel(dbCharacter.CharacterName));
         }
 
         /// <summary>
@@ -44,18 +47,20 @@ namespace dwCheckApi.Controllers
         /// If no record can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("GetByName")]
-        public JsonResult GetByName(string characterName)
+        public IActionResult GetByName(string characterName)
         {
             if (string.IsNullOrWhiteSpace(characterName))
             {
-                return ErrorResponse("Character name is required");
+                return BadRequest("Character name is required");
             }
 
             var character = _characterService.GetByName(characterName);
-
-            return character == null
-                ? ErrorResponse("No character found")
-                : SingleResult(CharacterViewModelHelpers.ConvertToViewModel(character.CharacterName));
+            if (character == null)
+            {
+                return NotFound("No character found");
+            } 
+            
+            return Ok(CharacterViewModelHelpers.ConvertToViewModel(character.CharacterName));
         }
 
         /// <summary>
@@ -68,15 +73,18 @@ namespace dwCheckApi.Controllers
         /// If no record can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("Search")]
-        public JsonResult Search(string searchString)
+        public IActionResult Search(string searchString)
         {
             var foundCharacters = _characterService
                 .Search(searchString).ToList();
 
-           
-            return !foundCharacters.Any()
-                ? ErrorResponse("No Characters found")
-                : MultipleResults(foundCharacters
+            if (!foundCharacters.Any())
+            {
+                return NotFound("No characters found");
+            }
+            
+            
+            return Ok(foundCharacters
                     .Select(character => CharacterViewModelHelpers
                         .ConvertToViewModel(character.Key,
                             character.ToDictionary(bc => bc.Book.BookOrdinal, bc => bc.Book.BookName))));

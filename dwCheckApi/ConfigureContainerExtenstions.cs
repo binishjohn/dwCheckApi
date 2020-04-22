@@ -5,7 +5,7 @@ using dwCheckApi.Helpers;
 using dwCheckApi.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace dwCheckApi
 {
@@ -35,7 +35,7 @@ namespace dwCheckApi
 
         public static void AddCustomizedMvc(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddMvc();
+            serviceCollection.AddControllers();
         }
 
         public static void AddCorsPolicy(this IServiceCollection serviceCollection, string corsPolicyName = null)
@@ -73,20 +73,20 @@ namespace dwCheckApi
         public static void AddSwagger(this IServiceCollection serviceCollection, string versionNumberString,
             bool includeXmlDocumentation = true)
         {
+           
             // Register the Swagger generator, defining one or more Swagger documents
             serviceCollection.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc($"v{CommonHelpers.GetVersionNumber()}",
-                    new Info
+                    new OpenApiInfo
                     {
                         Title = "dwCheckApi",
                         Version = $"v{CommonHelpers.GetVersionNumber()}",
                         Description = "A simple APi to get the details on Books, Characters and Series within a canon of novels",
-                        Contact = new Contact
+                        Contact = new OpenApiContact
                         {
                             Name = "Jamie Taylor",
-                            Email = "",
-                            Url = "https://dotnetcore.gaprogman.com"
+                            Email = ""
                         }
                     }
                 );

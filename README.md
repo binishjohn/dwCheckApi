@@ -5,7 +5,14 @@
 AppVeyor projects have been removed, as this project now uses docker and the chosen docker images are Linux based (for size and speed reasons)
 
 ## Licence
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Requirements
+
+- [.NET Core SDK vLatest](https://dot.net/core)
+- [.NET EF Global tool](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet)
+  - tl;dr: `dotnet tool install --global dotnet-ef`
 
 ## Support This Project
 
@@ -14,6 +21,7 @@ If you have found this project helpful, either as a library that you use or as a
 <a href="https://www.buymeacoffee.com/dotnetcoreshow" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important" ></a>
 
 ## Code Triage Status
+
 [![Code Triagers Badge](https://www.codetriage.com/gaprogman/dwcheckapi/badges/users.svg)](https://www.codetriage.com/gaprogman/dwcheckapi)
 
 ## Description
@@ -25,6 +33,7 @@ It uses Entity Framework Core to communicate with a Sqlite database, which conta
 It has been released, as is, using an MIT licence. For more information on the MIT licence, please see either the `LICENSE` file in the root of the repository or see the tl;dr Legal page for [MIT](https://tldrlegal.com/license/mit-license)
 
 ## Code of Conduct
+
 dwCheckApi has a Code of Conduct which all contributors, maintainers and forkers must adhere to. When contributing, maintaining, forking or in any other way changing the code presented in this repository, all users must agree to this Code of Conduct.
 
 See `Code of Conduct.md` for details.

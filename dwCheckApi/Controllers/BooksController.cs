@@ -5,8 +5,8 @@ using dwCheckApi.DTO.Helpers;
 
 namespace dwCheckApi.Controllers
 {
+    [ApiController]
     [Route("/[controller]")]
-    [Produces("application/json")]
     public class BooksController : BaseController
     {
         private readonly IBookService _bookService;
@@ -27,15 +27,15 @@ namespace dwCheckApi.Controllers
         /// If no record can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("Get/{id}")]
-        public JsonResult GetByOrdinal(int id)
+        public IActionResult GetByOrdinal(int id)
         {
             var book = _bookService.FindByOrdinal(id);
             if (book == null)
             {
-                return ErrorResponse("Not found");
+                return NotFound("Book not found");
             }
 
-            return SingleResult(BookViewModelHelpers.ConvertToViewModel(book));
+            return Ok(BookViewModelHelpers.ConvertToViewModel(book));
         }
 
         /// <summary>
@@ -48,20 +48,20 @@ namespace dwCheckApi.Controllers
         /// If no record can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("GetByName")]
-        public JsonResult GetByName(string bookName)
+        public IActionResult GetByName(string bookName)
         {
             if (string.IsNullOrWhiteSpace(bookName))
             {
-                return ErrorResponse("Book name is required");
+                return BadRequest("Book name is required");
             }
             var book = _bookService.GetByName(bookName);
 
             if (book == null)
             {
-                return ErrorResponse("No book with that name could be found");
+                return NotFound("No book with that name could be found");
             }
 
-            return SingleResult(BookViewModelHelpers.ConvertToViewModel(book));
+            return Ok(BookViewModelHelpers.ConvertToViewModel(book));
         }
 
         /// <summary>
@@ -75,16 +75,16 @@ namespace dwCheckApi.Controllers
         /// If no records can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("Search")]
-        public JsonResult Search(string searchString)
+        public IActionResult Search(string searchString)
         {
             var dbBooks = _bookService.Search(searchString).ToList();
 
             if (!dbBooks.Any())
             {
-                return ErrorResponse();
+                return NotFound();
             }
 
-            return MultipleResults(BookViewModelHelpers.ConvertToViewModels(dbBooks));
+            return Ok(BookViewModelHelpers.ConvertToViewModels(dbBooks));
         }
 
         /// <summary>
@@ -97,16 +97,16 @@ namespace dwCheckApi.Controllers
         /// If no records can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("Series/{seriesId}")]
-        public JsonResult GetForSeries(int seriesId)
+        public IActionResult GetForSeries(int seriesId)
         {
             var dbBooks = _bookService.Series(seriesId).ToList();
 
             if (!dbBooks.Any())
             {
-                return ErrorResponse();
+                return NotFound();
             }
             
-            return MultipleResults(BookViewModelHelpers.ConvertToBaseViewModels(dbBooks));
+            return Ok(BookViewModelHelpers.ConvertToBaseViewModels(dbBooks));
         }
         
         /// <summary>
@@ -121,15 +121,15 @@ namespace dwCheckApi.Controllers
         /// If no record can be found, then an <see cref="BaseController.ErrorResponse"/> is returned
         /// </returns>
         [HttpGet("GetBookCover/{bookId}")]
-        public JsonResult GetBookCover(int bookId)
+        public IActionResult GetBookCover(int bookId)
         {
             var dbBook = _bookService.FindById(bookId);
             if (dbBook == null)
             {
-                return ErrorResponse();
+                return NotFound();
             }
 
-            return SingleResult(BookViewModelHelpers.ConverToBookCoverViewModel(dbBook));
+            return Ok(BookViewModelHelpers.ConverToBookCoverViewModel(dbBook));
         }
     }
 }
